@@ -29,6 +29,6 @@ int main(){
         }
     }
     if (detectedPeople ==0){
-        cout << agethreshold << "이상의 나이를 가진 고객이 없습니다";
+        cout << ageThreshold << "이상의 나이를 가진 고객이 없습니다";
     }
 }

@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-int man () {
+int main () {
     const int STUDENTS = 5;
     int scores[STUDENTS];
     int sum = 0;

@@ -8,7 +8,7 @@ const int mapY = 5;
 bool checkXY(int user_x, int user_y, int mapX, int mapY);
 void displayMap(int map[][mapX], int user_x, int user_y);
 bool checkGoal(int map[][mapX], int user_x, int user_y);
-void checkState(int map[][mapX], int user_x, int user_y, int& hp, bool& weapon, int& armor);
+void checkState(int map[][mapX], int user_x, int user_y, int& hp, bool& weapon, int& armor, int prev_x, int prev_y);
 // 메인  함수
 int main() {
     // 0은 빈 공간, 1은 아이템, 2는 적, 3은 포션, 4는 목적지
@@ -31,12 +31,15 @@ int main() {
 		cout << "명령어를 입력하세요 (up,down,left,right,map,exit): ";
 		cin >> user_input;
 
+		int prev_x = user_x; //중복 체크
+        int prev_y = user_y;
+
 		if (user_input == "up") {
             // 위로 한 칸 올라가기
 			user_y -= 1;
 			if (!checkXY(user_x, user_y, mapX, mapY)) {
 				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_y += 1;
+				user_y = prev_y;
 			} else {
 					hp -= 1; //체력 -
 				cout << "위로 한 칸 올라갑니다. 남은 HP: " << hp << endl;
@@ -47,7 +50,7 @@ int main() {
 			user_y += 1;
 			if (!checkXY(user_x, user_y, mapX, mapY)) {
 				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_y -= 1;
+				user_y = prev_y;
 			} else {
 					hp -= 1; //체력 -
 				cout << "아래로 한 칸 내려갑니다. 남은 HP: " << hp << endl;
@@ -58,7 +61,7 @@ int main() {
 			user_x -= 1;
 			if (!checkXY(user_x, user_y, mapX, mapY)) {
 				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_x += 1;
+				user_y = prev_y;
 			} else {
 				hp -= 1; //체력 -
 				cout << "왼쪽으로 이동합니다. 남은 HP: " << hp << endl;
@@ -69,7 +72,7 @@ int main() {
             // TODO: 오른쪽으로 이동하기
 			if (!checkXY(user_x, user_y, mapX, mapY)) {
 				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_x -= 1;
+				user_y = prev_y;
 			} else {
 				hp -= 1;//체력 -
 				cout << "오른쪽으로 이동합니다. 남은 HP: " << hp << endl;
@@ -85,7 +88,9 @@ int main() {
 			cout << "잘못된 입력입니다." << endl;
 		}
 
-		checkState(map, user_x, user_y, hp, weapon, armor);
+		if (user_x != prev_x || user_y != prev_y) {
+            checkState(map, user_x, user_y, hp, weapon, armor, prev_x, prev_y);
+        }
 
         // 체력이 0 이하인 경우 게임 종료
 		if (hp <= 0) {
@@ -134,7 +139,8 @@ bool checkGoal(int map[][mapX], int user_x, int user_y) {
 }
 
 // 유저 상태 체크 (아이템, 적, 포션)
-void checkState(int map[][mapX], int user_x, int user_y, int& hp, bool& weapon, int& armor) {
+void checkState(int map[][mapX], int user_x, int user_y, int& hp, bool& weapon, int& armor, int prev_x, int prev_y) {
+	if (user_x == prev_x && user_y == prev_y) return;
 	switch (map[user_y][user_x]) {
 		case 1:
 			if (rand() % 2 == 0) {

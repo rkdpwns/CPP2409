@@ -61,7 +61,7 @@ int main() {
 			user_x -= 1;
 			if (!checkXY(user_x, user_y, mapX, mapY)) {
 				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_y = prev_y;
+				user_x = prev_x;
 			} else {
 				hp -= 1; //체력 -
 				cout << "왼쪽으로 이동합니다. 남은 HP: " << hp << endl;
@@ -72,7 +72,7 @@ int main() {
             // TODO: 오른쪽으로 이동하기
 			if (!checkXY(user_x, user_y, mapX, mapY)) {
 				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_y = prev_y;
+				user_x = prev_x;
 			} else {
 				hp -= 1;//체력 -
 				cout << "오른쪽으로 이동합니다. 남은 HP: " << hp << endl;

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "user.h"
 using namespace std;
 
@@ -8,25 +9,25 @@ const int mapY = 5;
 
 // 사용자 정의 함수
 bool checkXY(int user_x, int user_y, int mapX, int mapY);
-void displayMap(int map[][mapX], int user_x, int user_y);
-bool checkGoal(int map[][mapX], int user_x, int user_y);
-void checkState(int map[][mapX], int user_x, int user_y, User& user, bool& weapon, int& armor, int prev_x, int prev_y);
+void displayMap(const vector<vector<int>>& map, int user_x, int user_y);
+bool checkGoal(const vector<vector<int>>& map, int user_x, int user_y);
+void checkState(vector<vector<int>>& map, int user_x, int user_y, User& user, bool& weapon, int& armor, int prev_x, int prev_y);
 bool CheckUser(User user);
 
 int main() {
-    int map[mapY][mapX] = { 
+    vector<vector<int>> map = {
         {0, 1, 2, 0, 4},
         {1, 0, 0, 2, 0},
         {0, 0, 0, 0, 0},
         {0, 2, 3, 0, 0},
-        {3, 0, 0, 0, 2} 
+        {3, 0, 0, 0, 2}
     };
-    
+
     int user_x = 0;
     int user_y = 0;
     bool weapon = false;
     int armor = 0;
-    
+
     User user;  // User 객체 생성
 
     while (true) {
@@ -90,7 +91,6 @@ int main() {
             checkState(map, user_x, user_y, user, weapon, armor, prev_x, prev_y);
         }
 
-        // hp가 0 이하인지 확인하여 게임 종료 여부 결정
         if (!CheckUser(user)) {
             cout << "체력이 0 이하입니다. 게임이 종료됩니다." << endl;
             break;
@@ -105,13 +105,11 @@ int main() {
     return 0;
 }
 
-
-// 맵과 유저 위치를 출력하는 함수
-void displayMap(int map[][mapX], int user_x, int user_y) {
-    for (int i = 0; i < mapY; i++) {
-        for (int j = 0; j < mapX; j++) {
+void displayMap(const vector<vector<int>>& map, int user_x, int user_y) {
+    for (int i = 0; i < map.size(); i++) {
+        for (int j = 0; j < map[i].size(); j++) {
             if (i == user_y && j == user_x) {
-                cout << " USER |";  // 유저 위치 표시
+                cout << " USER |";
             } else {
                 switch (map[i][j]) {
                     case 0: cout << "      |"; break;
@@ -127,18 +125,11 @@ void displayMap(int map[][mapX], int user_x, int user_y) {
     }
 }
 
-// 이동하려는 좌표 유효 체크
-bool checkXY(int user_x, int user_y, int mapX, int mapY) {
-    return (user_x >= 0 && user_x < mapX && user_y >= 0 && user_y < mapY);
-}
-
-// 유저 목적지 도달 체크
-bool checkGoal(int map[][mapX], int user_x, int user_y) {
+bool checkGoal(const vector<vector<int>>& map, int user_x, int user_y) {
     return map[user_y][user_x] == 4;
 }
 
-// 유저 상태 체크 (아이템, 적, 포션)
-void checkState(int map[][mapX], int user_x, int user_y, User& user, bool& weapon, int& armor, int prev_x, int prev_y) {
+void checkState(vector<vector<int>>& map, int user_x, int user_y, User& user, bool& weapon, int& armor, int prev_x, int prev_y) {
     if (user_x == prev_x && user_y == prev_y) return;
 
     switch (map[user_y][user_x]) {
@@ -171,7 +162,10 @@ void checkState(int map[][mapX], int user_x, int user_y, User& user, bool& weapo
     }
 }
 
-// hp가 0 이하인지 확인
 bool CheckUser(User user) {
     return user.GetHP() > 0;
+}
+
+bool checkXY(int user_x, int user_y, int mapX, int mapY) {
+    return (user_x >= 0 && user_x < mapX && user_y >= 0 && user_y < mapY);
 }

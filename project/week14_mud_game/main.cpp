@@ -24,7 +24,7 @@ vector<vector<int>> loadMapFromFile(const string& filename) {
         for (int j = 0; j < mapX; ++j) {
             int value;
             if (!(file >> value)) {
-                throw runtime_error("맵 데이터가 잘못되었습니다. 올바른 형식을 확인하세요.");
+                throw runtime_error("맵 데이터가 잘못되었습니다.");
             }
             row.push_back(value);
         }
@@ -32,7 +32,7 @@ vector<vector<int>> loadMapFromFile(const string& filename) {
     }
 
     if (map.size() != mapY || map[0].size() != mapX) {
-        throw runtime_error("맵 데이터 크기가 예상과 다릅니다.");
+        throw runtime_error("맵 데이터 크기가 다릅니다.");
     }
 
     return map;
